@@ -18,8 +18,10 @@ async def record_event(request):
     event = await request.json()
     event = dict(event)
     map_shape = await db.shape.find_one({}, {'_id': 0})
+
     if event['x'] >= map_shape['x'] or event['y'] >= map_shape['y']:
         return web.Response(status=400)
+
     event_type = event.pop('type')
     if event_type == 'start':
         await db.coordinates.insert_one(event)
